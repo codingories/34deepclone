@@ -26,5 +26,19 @@ describe("deepClone", ()=>{
     const empty = null
     const empty2 = deepClone(empty)
     assert(empty === empty2);
+    const sym = Symbol();
+    const sym2 = deepClone(sym);
+    assert(sym === sym2);
+  })
+  describe("对象", ()=>{
+    it("能够复制普通对象",()=>{
+      const a = { name: "方方", child: {name: "小方方"}}
+      const a2 = deepClone(a);
+      assert(a !== a2);
+      assert(a.name === a2.name)
+      assert(a.child !== a2.child)
+      assert(a.child.name === a2.child.name)
+
+    })
   })
 })
