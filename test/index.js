@@ -93,8 +93,8 @@ describe("deepClone", ()=>{
       assert(a.xxx.yyy.zzz === a2.xxx.yyy.zzz);
       assert(a.xxx.yyy !== a2.xxx.yyy);
       assert(a.xxx !== a2.xxx)
-    }),
-      it('可以复制日期',()=>{
+    });
+    it('可以复制日期',()=>{
         // const a = /hi\d+/gi;
         const a = new Date();
         a.xxx = { yyy : { zzz:1 } };
@@ -104,6 +104,16 @@ describe("deepClone", ()=>{
         assert(a.xxx.yyy.zzz === a2.xxx.yyy.zzz);
         assert(a.xxx.yyy !== a2.xxx.yyy);
         assert(a.xxx !== a2.xxx)
-      })
+    });
+    it("自动跳过原型属性",()=>{
+      const a = Object.create({ name: "a" })
+      a.xxx = { yyy: { zzz:1 } };
+      const a2 = deepClone(a);
+      assert(a !== a2);
+      assert.isFalse('name' in a2);
+      assert(a.xxx.yyy.zzz === a2.xxx.yyy.zzz);
+      assert(a.xxx.yyy !== a2.xxx.yyy);
+      assert(a.xxx !== a2.xxx)
+    })
   })
 })

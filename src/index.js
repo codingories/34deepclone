@@ -24,8 +24,10 @@ function deepClone(source){
         dist = new Object();
       }
       cache.push([source,dist])
-      for(let key in source){
-        dist[key] = deepClone(source[key]);
+      for(let key in source){ // 尽量少用for in, for in可能会复制本身不想复制的属性
+        if (source.hasOwnProperty(key)){
+          dist[key] = deepClone(source[key]);
+        }
       }
       return dist;
     }
