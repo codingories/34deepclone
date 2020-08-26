@@ -1,23 +1,42 @@
-function deepClone(source){
-  if (source instanceof Object){
-    // const a = { name: "方方", child: {name: "小方方"}}
-    let dist;
-    if(source instanceof Array){
-      dist = new Array();
+let cache = [];
 
-    } else if(source instanceof Function){
-      dist = function() {
-        return source.apply(this, arguments)
+function deepClone(source){
+
+  if (source instanceof Object){
+    let cachedDist = findCache(source);
+    if(cachedDist){
+      console.log('有缓存')
+      return cachedDist;
+    }else {
+      console.log('没缓存')
+      let dist;
+      if(source instanceof Array){
+        dist = new Array();
+      } else if(source instanceof Function){
+        dist = function() {
+          return source.apply(this, arguments)
+        }
+      } else{
+        dist = new Object();
       }
-    } else{
-      dist = new Object();
+      cache.push([source,dist])
+      for(let key in source){
+        dist[key] = deepClone(source[key]);
+      }
+      return dist;
     }
-    for(let key in source){
-      dist[key] = deepClone(source[key]);
-    }
-    return dist;
   }
   return source
 }
+
+function findCache(source){
+  for(let i=0; i<cache.length;i++){
+    if(cache[i][0] === source){
+      return cache[i][1];
+    }
+  }
+  return undefined
+}
+
 
 module.exports = deepClone;
